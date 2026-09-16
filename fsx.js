@@ -1,6 +1,77 @@
 const STORAGE_KEY = "financasx_transacoes";
 const GOAL_KEY = "financasx_meta";
 const BUDGET_KEY = "financasx_orcamentos";
+// ===============================
+// BARRA DE CARREGAMENTO GLOBAL
+// ===============================
+
+function mostrarLoading(mensagem = "Carregando...") {
+
+    let loading = document.getElementById("fsxLoading");
+
+    if (!loading) {
+
+        loading = document.createElement("div");
+
+        loading.id = "fsxLoading";
+
+        loading.innerHTML = `
+            <div class="fsx-loading-text">
+                <span id="fsxLoadingMensagem">${mensagem}</span>
+                <span id="fsxLoadingPercentual">0%</span>
+            </div>
+
+            <div class="fsx-loading-track">
+                <div id="fsxLoadingBar"></div>
+            </div>
+        `;
+
+        document.body.appendChild(loading);
+
+    }
+
+    loading.classList.add("ativo");
+
+    atualizarLoading(0, mensagem);
+}
+
+
+function atualizarLoading(percentual, mensagem) {
+
+    const barra = document.getElementById("fsxLoadingBar");
+    const texto = document.getElementById("fsxLoadingMensagem");
+    const numero = document.getElementById("fsxLoadingPercentual");
+
+    if (barra) {
+        barra.style.width = `${percentual}%`;
+    }
+
+    if (texto) {
+        texto.textContent = mensagem;
+    }
+
+    if (numero) {
+        numero.textContent = `${percentual}%`;
+    }
+
+}
+
+
+function esconderLoading() {
+
+    const loading = document.getElementById("fsxLoading");
+
+    if (!loading) {
+        return;
+    }
+
+    atualizarLoading(100, "Concluído");
+
+    setTimeout(() => {
+        loading.classList.remove("ativo");
+    }, 300);
+
+}
 
 const categorias = [
     "Geral",
@@ -2174,7 +2245,7 @@ function atualizarFiscal() {
         lancamentosAno.length;
   if (has("fiscalResumoReceitas")) {
 
-        $("fiscalResumo").textContent = format
+        $("fiscalResumoReceitas").textContent = format
         (receitas);
     } 
     if (has("fiscalResumoDespesas")) {
@@ -2198,19 +2269,41 @@ function atualizarFiscal() {
 ===================================================== */
 
 function init() {
+    function init() {
 
-    normalizarDados();
+    mostrarLoading("Carregando dados...");
 
-    preencherCategorias();
+    requestAnimationFrame(() => {
 
+        atualizarLoading(
+            15,
+            "Dados carregados."
+        );
+
+        normalizarDados();
+
+        requestAnimationFrame(() => {
+
+            atualizarLoading(
+                25,
+                "Preparando categorias..."
+            );
+        
+            preencherCategorias();S
+
+    atualizarLoading(35, "Preparando filtros...");
     preencherMesesFiltro();
 
+    atualizarLoading(45, "Configurando data...");
     setDefaultDate();
 
+    atualizarLoading(55, "Configurando eventos...");
     bindEvents();
 
+    atualizarLoading(65, "Atualizando página...");
     marcarPaginaAtual();
 
+    atualizarLoading(75, "Calculando resumo financeiro...");
     atualizarResumo();
 
     atualizarMeta();
@@ -2226,6 +2319,8 @@ function init() {
     atualizarFiscal();
 
     animateBackground();
+
+    esconderLoading();
 }
 
 window.editarItem =
@@ -2234,4 +2329,4 @@ window.editarItem =
 window.removerItem =
     removerItem;
 
-init();
+init();}
