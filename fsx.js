@@ -2105,7 +2105,12 @@ function bindEvents() {
             );
         }
     });
+    $("anoFiscal")?.addEventListener(
+        "change",
+        atualizarFiscal
+    );
 }
+
 
 function atualizarFiscal() {
 
@@ -2167,8 +2172,27 @@ function atualizarFiscal() {
 
     $("fiscalMovimentacoes").textContent =
         lancamentosAno.length;
-}
+  if (has("fiscalResumoReceitas")) {
 
+        $("fiscalResumo").textContent = format
+        (receitas);
+    } 
+    if (has("fiscalResumoDespesas")) {
+
+        $("fiscalResumoDespesas").textContent = format
+        (despesas);
+    }
+    if (has("fiscalResumoInvestimentos")) {
+
+        $("fiscalResumoInvestimentos").textContent = format
+        (investimentos);
+    }
+    if (has("fiscalResumoMovimentacoes")) {
+
+        $("fiscalResumoMovimentacoes").textContent = lancamentosAno.length;
+    }
+    }
+    
 /* =====================================================
    INICIALIZAÇÃO
 ===================================================== */
