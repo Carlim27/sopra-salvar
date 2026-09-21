@@ -1282,19 +1282,21 @@ return `
 
             </span>
 
-            <button
-                class="icon-btn edit-btn"
-                onclick="editarItem(${item.id})"
-                title="Editar">
-                ✏️
-            </button>
+<button
+    class="icon-btn edit-btn"
+    onclick="editarItem(${item.id})"
+    title="Editar lançamento"
+    aria-label="Editar lançamento">
+    ✏️
+</button>
 
-            <button
-                class="icon-btn delete-btn"
-                onclick="removerItem(${item.id})"
-                title="Remover">
-                🗑️
-            </button>
+<button
+    class="icon-btn delete-btn"
+    onclick="removerItem(${item.id})"
+    title="Excluir lançamento"
+    aria-label="Excluir lançamento">
+    🗑️
+</button>
 
         </div>
 
@@ -1765,39 +1767,36 @@ REMOVER ITEM
 
 function removerItem(id) {
 
-if (
-    !confirm(
-        "Deseja remover este lançamento?"
-    )
-) {
-    return;
-}
+    mostrarConfirmacao(
+        "Deseja remover este lançamento? Essa ação não poderá ser desfeita.",
+        () => {
 
-data =
-    data.filter(
-        item =>
-            item.id !== id
+            data =
+                data.filter(
+                    item =>
+                        item.id !== id
+                );
+
+            salvarDados();
+
+            atualizarResumo();
+
+            atualizarMeta();
+
+            renderLancamentos();
+
+            renderDashboard();
+
+            atualizarBudgets();
+
+            atualizarGraficos();
+
+            mostrarNotificacao(
+                "Lançamento removido com sucesso.",
+                "sucesso"
+            );
+        }
     );
-
-salvarDados();
-
-atualizarResumo();
-
-atualizarMeta();
-
-renderLancamentos();
-
-renderDashboard();
-
-atualizarBudgets();
-
-atualizarGraficos();
-
-mostrarNotificacao(
-    "Lançamento removido com sucesso.",
-    "sucesso"
-);
-
 }
 
 /* =====================================================
@@ -2910,22 +2909,6 @@ mostrarNotificacao(
     "FinançaSX pronto!",
     "sucesso"
 );
-
-
-// TESTE TEMPORÁRIO DA CONFIRMAÇÃO
-
-mostrarConfirmacao(
-    "Esta é uma confirmação de teste.",
-    () => {
-
-        mostrarNotificacao(
-            "Confirmação funcionando!",
-            "sucesso"
-        );
-
-    }
-);
-
 
 esconderLoading();
 
