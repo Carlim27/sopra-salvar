@@ -172,6 +172,15 @@ const has =
 id =>
 !!$(id);
 
+function escaparHtml(valor) {
+    return String(valor ??"")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 /* =====================================================
 NOTIFICAÇÕES
 ===================================================== */
@@ -1206,6 +1215,17 @@ TRANSAÇÃO HTML
 function transacaoHtml(
 item
 ) {
+    const descricao=
+    escaparHtml(item.descricao);
+
+    const categoria =
+    escaparHtml(item.categoria);
+
+    const pagamento =
+    escaparHtml(item.pagamento||"Sem forma de pagamento");
+
+    const observacao =
+    escaparHtml(item.observacao||"");
 
 return `
     <div class="item">
@@ -1215,7 +1235,7 @@ return `
             <div class="item-title-row">
 
                 <strong>
-                    ${item.descricao}
+                    ${descricao}
                 </strong>
 
                 <span
@@ -1232,7 +1252,7 @@ return `
 
             <div class="small">
 
-                ${item.categoria}
+                ${categoria}
 
                 •
 
@@ -1245,16 +1265,11 @@ return `
 
                 •
 
-                ${
-                    item.pagamento ||
-                    "Sem forma de pagamento"
-                }
+                ${pagamento}
 
-                ${
-                    item.observacao
+                ${observacao
                         ? `<br>${item.observacao}`
-                        : ""
-                }
+                        : ""}
 
             </div>
 
